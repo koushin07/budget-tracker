@@ -64,3 +64,10 @@ export async function getUsdToPhp(fallbackRate: number): Promise<FxCache> {
 export function lastKnownUsdToPhp(fallbackRate: number): number {
   return readCache()?.usdToPhp ?? fallbackRate
 }
+
+/** User-entered rate: cached like a live fetch so the whole app uses it. */
+export function setManualUsdToPhp(rate: number): FxCache {
+  const cache: FxCache = { usdToPhp: rate, fetchedAt: new Date().toISOString(), source: 'manual' }
+  writeCache(cache)
+  return cache
+}

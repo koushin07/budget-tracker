@@ -3,10 +3,11 @@ import { useStore } from '../store/store'
 import { Card } from './ui'
 
 export function Converter() {
-  const { fx, refreshFx } = useStore()
+  const { fx, refreshFx, setManualRate } = useStore()
   const [usd, setUsd] = useState('100')
   const [php, setPhp] = useState(() => (100 * fx.usdToPhp).toFixed(2))
   const [refreshing, setRefreshing] = useState(false)
+  const [manual, setManual] = useState('')
 
   const rate = fx.usdToPhp
 
@@ -70,6 +71,34 @@ export function Converter() {
           This is the same live mid-market rate used to convert your automated USD salary into pesos and to normalize
           USD accounts, bills and analytics. It refreshes automatically every 30 minutes.
         </p>
+
+        <h3 className="section-sub">Set the rate manually</h3>
+        <p className="muted">
+          If the live rate can't be fetched (offline, or blocked by your network), enter the current rate yourself —
+          the whole app will use it until a live rate is available again.
+        </p>
+        <div className="goal-actions">
+          <input
+            type="number"
+            step="0.0001"
+            min="0"
+            placeholder={`e.g. ${rate.toFixed(2)}`}
+            value={manual}
+            onChange={(e) => setManual(e.target.value)}
+          />
+          <button
+            className="btn ghost"
+            onClick={() => {
+              const r = Number(manual)
+              if (r > 0) {
+                setManualRate(r)
+                setManual('')
+              }
+            }}
+          >
+            Use this rate
+          </button>
+        </div>
       </Card>
     </div>
   )

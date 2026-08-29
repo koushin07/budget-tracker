@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Account, AppState, FxCache, IncomeRule, Payable, SavingsGoal, Transaction } from '../types'
-import { getUsdToPhp, lastKnownUsdToPhp } from '../lib/fx'
+import { getUsdToPhp, lastKnownUsdToPhp, setManualUsdToPhp } from '../lib/fx'
 import { dueRuns, nextRunAfter } from '../lib/recurrence'
 import { todayISO } from '../lib/dates'
 
@@ -40,6 +40,7 @@ type Action =
   | { type: 'postIncome'; rule: IncomeRule; runDate: string; rate: number }
   | { type: 'payOccurrence'; payableId: string; periodKey: string; accountId: string; rate: number; dueDate: string }
   | { type: 'contribute'; goalId: string; amount: number; accountId: string; rate: number }
+  | { type: 'setFallbackRate'; rate: number }
 
 function applyToBalance(accounts: Account[], accountId: string, delta: number): Account[] {
   return accounts.map((a) => (a.id === accountId ? { ...a, balance: a.balance + delta } : a))
@@ -156,6 +157,9 @@ function reducer(state: AppState, action: Action): AppState {
       }
     }
 
+    case 'setFallbackRate':
+      return { ...state, settings: { ...state.settings, fallbackUsdToPhp: action.rate } }
+
     case 'contribute': {
       const g = state.goals.find((x) => x.id === action.goalId)
       const account = state.accounts.find((a) => a.id === action.accountId)
@@ -188,7 +192,8 @@ interface Store {
   dispatch: React.Dispatch<Action>
   fx: FxCache
   refreshFx: () => Promise<void>
-  exportData: () => void
+  setManualRate: (rate: number) => void
+  exportData: () => Promise<void>
   importData: (file: File) => Promise<void>
 }
 
@@ -229,6 +234,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setFx(fresh)
   }
 
+  const setManualRate = (rate: number) => {
+    if (!Number.isFinite(rate) || rate <= 0) return
+    dispatch({ type: 'setFallbackRate', rate })
+    setFx(setManualUsdToPhp(rate))
+  }
+
   // Fetch live rate on load and every 30 minutes
   useEffect(() => {
     refreshFx()
@@ -267,12 +278,27 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rulesKey])
 
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })
+  const exportData = async () => {
+    const json = JSON.stringify(state, null, 2)
+    const filename = `pesowise-backup-${todayISO()}.json`
+    // When running as a Claude artifact, downloads must go through the viewer's save prompt
+    const claude = (window as { claude?: { use?: (name: string) => Promise<unknown> } }).claude
+    if (claude?.use) {
+      try {
+        const downloads = (await claude.use('downloads')) as { save: (r: { filename: string; data: string }) => Promise<unknown> } | null
+        if (downloads) {
+          await downloads.save({ filename, data: json })
+          return
+        }
+      } catch {
+        return // viewer declined or save unavailable — don't fall through to a blocked blob link
+      }
+    }
+    const blob = new Blob([json], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `pesowise-backup-${todayISO()}.json`
+    a.download = filename
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -285,7 +311,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }
 
   const value = useMemo<Store>(
-    () => ({ state, dispatch, fx, refreshFx, exportData, importData }),
+    () => ({ state, dispatch, fx, refreshFx, setManualRate, exportData, importData }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [state, fx],
   )
