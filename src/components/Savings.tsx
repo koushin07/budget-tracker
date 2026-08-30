@@ -4,7 +4,7 @@ import { useStore, uid } from '../store/store'
 import { peso, pesoRound } from '../lib/format'
 import { monthlyIncomePHP, monthlyPayablesPHP, monthlySavingsCommitmentPHP, planGoal } from '../lib/analytics'
 import { formatDate } from '../lib/dates'
-import { Card, Empty, Field, Progress } from './ui'
+import { Card, ConfirmButton, Empty, Field, Progress, toast } from './ui'
 
 const blank = { name: '', targetAmount: '', savedSoFar: '', monthlyContribution: '', targetDate: '', accountId: '' }
 
@@ -155,7 +155,7 @@ export function Savings() {
                       const amount = Number(contrib[g.id])
                       const accountId = g.accountId || state.accounts[0]?.id
                       if (!amount || amount <= 0) return
-                      if (!accountId) { alert('Add an account first to draw the contribution from.'); return }
+                      if (!accountId) { toast('Add an account first to draw the contribution from.'); return }
                       dispatch({ type: 'contribute', goalId: g.id, amount, accountId, rate: fx.usdToPhp })
                       setContrib({ ...contrib, [g.id]: '' })
                     }}
@@ -163,12 +163,7 @@ export function Savings() {
                     Add to savings
                   </button>
                   <button className="btn ghost" onClick={() => startEdit(g)}>Edit</button>
-                  <button
-                    className="btn ghost danger"
-                    onClick={() => { if (confirm(`Delete goal "${g.name}"?`)) dispatch({ type: 'deleteGoal', id: g.id }) }}
-                  >
-                    Delete
-                  </button>
+                  <ConfirmButton label="Delete" onConfirm={() => dispatch({ type: 'deleteGoal', id: g.id })} />
                 </div>
               </div>
             )

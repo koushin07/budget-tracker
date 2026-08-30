@@ -5,7 +5,7 @@ import { money, peso } from '../lib/format'
 import { loanMonthsLeft, loanRemaining, toPHP } from '../lib/analytics'
 import { occurrencesWithin } from '../lib/recurrence'
 import { formatDate, todayISO } from '../lib/dates'
-import { Card, Empty, Field, Progress } from './ui'
+import { Card, ConfirmButton, Empty, Field, Progress, toast } from './ui'
 
 const KIND_LABEL: Record<PayableKind, string> = { bill: 'Bill', loan: 'Loan', expense: 'Expense' }
 
@@ -80,7 +80,7 @@ export function Payables() {
   const pay = (p: Payable, periodKey: string, dueDate: string) => {
     const accountId = payAccountId || state.accounts[0]?.id
     if (!accountId) {
-      alert('Add an account first so the payment can be drawn from it.')
+      toast('Add an account first so the payment can be drawn from it.')
       return
     }
     dispatch({ type: 'payOccurrence', payableId: p.id, periodKey, accountId, rate: fx.usdToPhp, dueDate })
@@ -217,12 +217,7 @@ export function Payables() {
                     </button>
                   )}
                   <button className="btn ghost" onClick={() => startEdit(p)}>Edit</button>
-                  <button
-                    className="btn ghost danger"
-                    onClick={() => { if (confirm(`Delete "${p.name}"?`)) dispatch({ type: 'deletePayable', id: p.id }) }}
-                  >
-                    Delete
-                  </button>
+                  <ConfirmButton label="Delete" onConfirm={() => dispatch({ type: 'deletePayable', id: p.id })} />
                 </div>
               </div>
             )
@@ -239,7 +234,7 @@ export function Payables() {
                   <span className="muted">{money(p.amount, p.currency)} — settled</span>
                 </div>
                 <div className="row-actions">
-                  <button className="btn ghost danger" onClick={() => dispatch({ type: 'deletePayable', id: p.id })}>Remove</button>
+                  <ConfirmButton label="Remove" onConfirm={() => dispatch({ type: 'deletePayable', id: p.id })} />
                 </div>
               </div>
             ))}

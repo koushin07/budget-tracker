@@ -5,7 +5,7 @@ import { money, peso } from '../lib/format'
 import { monthlyEquivalent, nextRunAfter } from '../lib/recurrence'
 import { addDays, formatDate, todayISO } from '../lib/dates'
 import { toPHP } from '../lib/analytics'
-import { Card, Empty, Field } from './ui'
+import { Card, ConfirmButton, Empty, Field } from './ui'
 
 const FREQ_LABEL: Record<IncomeFrequency, string> = {
   monthly: 'Monthly',
@@ -172,12 +172,7 @@ export function Income() {
                   >
                     {r.active ? 'Pause' : 'Resume'}
                   </button>
-                  <button
-                    className="btn ghost danger"
-                    onClick={() => { if (confirm(`Delete income rule "${r.name}"?`)) dispatch({ type: 'deleteIncomeRule', id: r.id }) }}
-                  >
-                    Delete
-                  </button>
+                  <ConfirmButton label="Delete" onConfirm={() => dispatch({ type: 'deleteIncomeRule', id: r.id })} />
                 </div>
               </div>
             )

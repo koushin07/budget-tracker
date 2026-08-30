@@ -13,7 +13,7 @@ import {
 } from '../lib/analytics'
 import { occurrencesWithin } from '../lib/recurrence'
 import { formatDate, todayISO } from '../lib/dates'
-import { Card, Empty, Field, Stat } from './ui'
+import { Card, ConfirmButton, Empty, Field, Stat } from './ui'
 
 export function Dashboard() {
   const { state, dispatch, fx } = useStore()
@@ -135,13 +135,11 @@ export function Dashboard() {
                     <td className={`num ${t.amount >= 0 ? 'good-text' : ''}`}>{account ? money(t.amount, account.currency) : peso(t.amountPHP)}</td>
                     <td className="num muted">{peso(t.amountPHP)}</td>
                     <td className="row-actions">
-                      <button
-                        className="btn ghost danger"
+                      <ConfirmButton
+                        label="✕"
                         title="Delete and reverse the balance change"
-                        onClick={() => { if (confirm('Delete this transaction? The account balance will be reversed.')) dispatch({ type: 'deleteTransaction', id: t.id }) }}
-                      >
-                        ✕
-                      </button>
+                        onConfirm={() => dispatch({ type: 'deleteTransaction', id: t.id })}
+                      />
                     </td>
                   </tr>
                 )

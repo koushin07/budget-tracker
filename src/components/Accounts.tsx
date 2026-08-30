@@ -3,7 +3,7 @@ import type { Account, AccountType, Currency } from '../types'
 import { useStore, uid } from '../store/store'
 import { money, peso } from '../lib/format'
 import { accountBalancePHP, totalCashPHP } from '../lib/analytics'
-import { Card, Empty, Field } from './ui'
+import { Card, ConfirmButton, Empty, Field } from './ui'
 
 const TYPE_LABEL: Record<AccountType, string> = {
   bank: 'Bank',
@@ -103,16 +103,11 @@ export function Accounts() {
                   <td className="num muted">{peso(accountBalancePHP(a, fx.usdToPhp))}</td>
                   <td className="row-actions">
                     <button className="btn ghost" onClick={() => startEdit(a)}>Edit</button>
-                    <button
-                      className="btn ghost danger"
-                      onClick={() => {
-                        if (confirm(`Delete account "${a.name}"? Its transactions stay in history.`)) {
-                          dispatch({ type: 'deleteAccount', id: a.id })
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
+                    <ConfirmButton
+                      label="Delete"
+                      title="Transactions stay in history"
+                      onConfirm={() => dispatch({ type: 'deleteAccount', id: a.id })}
+                    />
                   </td>
                 </tr>
               ))}

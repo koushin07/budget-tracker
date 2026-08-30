@@ -8,6 +8,7 @@ import { Savings } from './components/Savings'
 import { Projections } from './components/Projections'
 import { Advisor } from './components/Advisor'
 import { Converter } from './components/Converter'
+import { toast } from './components/ui'
 
 const TABS = [
   { id: 'dashboard', label: '📊 Dashboard', el: <Dashboard /> },
@@ -51,9 +52,9 @@ function Shell() {
               if (!f) return
               try {
                 await importData(f)
-                alert('Backup restored.')
+                toast('Backup restored.')
               } catch (err) {
-                alert(`Could not restore: ${err instanceof Error ? err.message : 'invalid file'}`)
+                toast(`Could not restore: ${err instanceof Error ? err.message : 'invalid file'}`)
               } finally {
                 e.target.value = ''
               }

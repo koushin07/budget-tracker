@@ -88,6 +88,18 @@ input:focus, select:focus { outline: 2px solid var(--accent-strong); outline-off
 .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--card-edge); }
 .btn.ghost:hover { color: var(--text); border-color: var(--muted); }
 .btn.ghost.danger:hover { color: var(--danger); border-color: var(--danger); }
+.btn.ghost.danger.armed { color: #fff; background: var(--danger); border-color: var(--danger); font-weight: 700; }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
+  background: var(--card); color: var(--text); border: 1px solid var(--card-edge);
+  border-left: 3px solid var(--accent); border-radius: 10px; padding: 10px 16px;
+  font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.25s, transform 0.25s;
+  max-width: min(90vw, 420px); box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .toast { transition: opacity 0.25s; transform: translate(-50%, 0); } }
 
 /* Lists */
 .list-item {
