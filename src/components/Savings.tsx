@@ -4,7 +4,7 @@ import { useStore, uid } from '../store/store'
 import { peso, pesoRound } from '../lib/format'
 import { monthlyIncomePHP, monthlyPayablesPHP, monthlySavingsCommitmentPHP, planGoal } from '../lib/analytics'
 import { formatDate } from '../lib/dates'
-import { Card, ConfirmButton, Empty, Field, Progress, toast } from './ui'
+import { Card, ConfirmButton, Empty, Field, Progress, ScrollIntoView, toast } from './ui'
 
 const blank = { name: '', targetAmount: '', savedSoFar: '', monthlyContribution: '', targetDate: '', accountId: '' }
 
@@ -67,6 +67,7 @@ export function Savings() {
           {surplus > 0 && ' — available to raise contributions or start a new goal.'}
         </p>
 
+        {showForm && <ScrollIntoView trigger={editingId} />}
         {showForm && (
           <form className="form-grid" onSubmit={submit}>
             <Field label="Goal name">

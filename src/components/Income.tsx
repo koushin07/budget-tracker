@@ -5,7 +5,7 @@ import { money, peso } from '../lib/format'
 import { monthlyEquivalent, nextRunAfter } from '../lib/recurrence'
 import { addDays, formatDate, todayISO } from '../lib/dates'
 import { toPHP } from '../lib/analytics'
-import { Card, ConfirmButton, Empty, Field } from './ui'
+import { Card, ConfirmButton, Empty, Field, ScrollIntoView } from './ui'
 
 const FREQ_LABEL: Record<IncomeFrequency, string> = {
   monthly: 'Monthly',
@@ -90,6 +90,7 @@ export function Income() {
           Expected monthly income: <strong>{peso(totalMonthlyPHP)}</strong>.
         </p>
 
+        {showForm && <ScrollIntoView trigger={editingId} />}
         {showForm && (
           <form className="form-grid" onSubmit={submit}>
             <Field label="Name">

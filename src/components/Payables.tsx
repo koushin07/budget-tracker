@@ -5,7 +5,7 @@ import { money, peso } from '../lib/format'
 import { loanMonthsLeft, loanRemaining, toPHP } from '../lib/analytics'
 import { occurrencesWithin } from '../lib/recurrence'
 import { formatDate, todayISO } from '../lib/dates'
-import { Card, ConfirmButton, Empty, Field, Progress, toast } from './ui'
+import { Card, ConfirmButton, Empty, Field, Progress, ScrollIntoView, toast } from './ui'
 
 const KIND_LABEL: Record<PayableKind, string> = { bill: 'Bill', loan: 'Loan', expense: 'Expense' }
 
@@ -100,6 +100,7 @@ export function Payables() {
           </button>
         }
       >
+        {showForm && <ScrollIntoView trigger={editingId} />}
         {showForm && (
           <form className="form-grid" onSubmit={submit}>
             <Field label="Name">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 /**
@@ -39,6 +39,19 @@ export function ConfirmButton({
       {armed ? confirmLabel : label}
     </button>
   )
+}
+
+/**
+ * Invisible marker that scrolls itself into view when mounted or when
+ * `trigger` changes. Placed above edit forms so tapping "Edit" far down a
+ * list visibly brings the form onto the screen (crucial on phones).
+ */
+export function ScrollIntoView({ trigger }: { trigger: unknown }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [trigger])
+  return <div ref={ref} style={{ scrollMarginTop: 12 }} />
 }
 
 /** Non-blocking notice; replaces alert(), which is blocked in sandboxed frames. */

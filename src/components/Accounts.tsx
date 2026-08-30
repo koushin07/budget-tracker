@@ -3,7 +3,7 @@ import type { Account, AccountType, Currency } from '../types'
 import { useStore, uid } from '../store/store'
 import { money, peso } from '../lib/format'
 import { accountBalancePHP, totalCashPHP } from '../lib/analytics'
-import { Card, ConfirmButton, Empty, Field } from './ui'
+import { Card, ConfirmButton, Empty, Field, ScrollIntoView } from './ui'
 
 const TYPE_LABEL: Record<AccountType, string> = {
   bank: 'Bank',
@@ -59,6 +59,7 @@ export function Accounts() {
           {' '}(USD balances converted at ₱{fx.usdToPhp.toFixed(2)})
         </p>
 
+        {showForm && <ScrollIntoView trigger={editingId} />}
         {showForm && (
           <form className="form-grid" onSubmit={submit}>
             <Field label="Account name">
