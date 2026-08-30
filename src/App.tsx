@@ -11,14 +11,14 @@ import { Converter } from './components/Converter'
 import { toast } from './components/ui'
 
 const TABS = [
-  { id: 'dashboard', label: '📊 Dashboard', el: <Dashboard /> },
-  { id: 'accounts', label: '🏦 Accounts', el: <Accounts /> },
-  { id: 'income', label: '💵 Income', el: <Income /> },
-  { id: 'payables', label: '🧾 Bills & Loans', el: <Payables /> },
-  { id: 'savings', label: '🐷 Savings', el: <Savings /> },
-  { id: 'projections', label: '📈 Projections', el: <Projections /> },
-  { id: 'advisor', label: '🧠 Advisor', el: <Advisor /> },
-  { id: 'converter', label: '💱 Converter', el: <Converter /> },
+  { id: 'dashboard', icon: '📊', text: 'Home', el: <Dashboard /> },
+  { id: 'accounts', icon: '🏦', text: 'Accounts', el: <Accounts /> },
+  { id: 'income', icon: '💵', text: 'Income', el: <Income /> },
+  { id: 'payables', icon: '🧾', text: 'Bills', el: <Payables /> },
+  { id: 'savings', icon: '🐷', text: 'Savings', el: <Savings /> },
+  { id: 'projections', icon: '📈', text: 'Forecast', el: <Projections /> },
+  { id: 'advisor', icon: '🧠', text: 'Advisor', el: <Advisor /> },
+  { id: 'converter', icon: '💱', text: 'Convert', el: <Converter /> },
 ] as const
 
 function Shell() {
@@ -65,8 +65,9 @@ function Shell() {
 
       <nav className="tabs">
         {TABS.map((t) => (
-          <button key={t.id} className={tab === t.id ? 'tab active' : 'tab'} onClick={() => setTab(t.id)}>
-            {t.label}
+          <button key={t.id} className={tab === t.id ? 'tab active' : 'tab'} onClick={() => { setTab(t.id); window.scrollTo(0, 0) }}>
+            <span className="tab-ico" aria-hidden="true">{t.icon}</span>
+            <span className="tab-txt">{t.text}</span>
           </button>
         ))}
       </nav>

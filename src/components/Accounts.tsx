@@ -90,17 +90,17 @@ export function Accounts() {
         {state.accounts.length === 0 ? (
           <Empty>No accounts yet. Add your banks, e-wallets and cash so every peso is tracked in one place.</Empty>
         ) : (
-          <table className="table">
+          <table className="table cards">
             <thead>
               <tr><th>Account</th><th>Type</th><th className="num">Balance</th><th className="num">≈ PHP</th><th /></tr>
             </thead>
             <tbody>
               {state.accounts.map((a) => (
                 <tr key={a.id}>
-                  <td><strong>{a.name}</strong>{a.institution && <span className="muted"> · {a.institution}</span>}</td>
-                  <td><span className="chip">{TYPE_LABEL[a.type]}</span> <span className="chip">{a.currency}</span></td>
-                  <td className="num">{money(a.balance, a.currency)}</td>
-                  <td className="num muted">{peso(accountBalancePHP(a, fx.usdToPhp))}</td>
+                  <td className="card-title"><strong>{a.name}</strong>{a.institution && <span className="muted"> · {a.institution}</span>}</td>
+                  <td data-label="Type"><span className="chip">{TYPE_LABEL[a.type]}</span> <span className="chip">{a.currency}</span></td>
+                  <td className="num" data-label="Balance">{money(a.balance, a.currency)}</td>
+                  <td className="num muted" data-label="≈ PHP">{peso(accountBalancePHP(a, fx.usdToPhp))}</td>
                   <td className="row-actions">
                     <button className="btn ghost" onClick={() => startEdit(a)}>Edit</button>
                     <ConfirmButton

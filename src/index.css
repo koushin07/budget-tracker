@@ -43,11 +43,12 @@ body {
 }
 .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 
-/* Tabs */
+/* Tabs — pills on desktop, fixed bottom bar on mobile */
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 20px; }
 .tab {
   background: var(--bg-soft); color: var(--muted); border: 1px solid transparent;
   padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
 }
 .tab:hover { color: var(--text); }
 .tab.active { background: var(--card); color: var(--text); border-color: var(--accent-strong); }
@@ -178,3 +179,71 @@ input:focus, select:focus { outline: 2px solid var(--accent-strong); outline-off
 .pay-from { display: flex; align-items: center; gap: 10px; margin: 6px 0 12px; }
 .pay-from select { max-width: 280px; }
 .footer { text-align: center; font-size: 12.5px; margin-top: 26px; }
+
+/* ============ Mobile (phone-first usage) ============ */
+@media (max-width: 720px) {
+  .app { padding: 0 12px calc(84px + env(safe-area-inset-bottom)); }
+
+  /* Compact header */
+  .topbar { padding: 12px 0 6px; }
+  .tagline { display: none; }
+  .brand-mark { width: 34px; height: 34px; font-size: 18px; border-radius: 10px; }
+  .brand h1 { font-size: 18px; }
+  .rate-badge { font-size: 12px; padding: 5px 10px; }
+
+  /* Bottom navigation bar */
+  .tabs {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 0;
+    margin: 0; background: var(--bg-soft); border-top: 1px solid var(--card-edge);
+    padding: 6px 2px calc(6px + env(safe-area-inset-bottom));
+  }
+  .tab {
+    flex-direction: column; gap: 2px; padding: 4px 0; border-radius: 8px;
+    background: transparent; border: none; font-size: 10px; min-height: 46px; justify-content: center;
+  }
+  .tab-ico { font-size: 19px; line-height: 1; }
+  .tab-txt { letter-spacing: 0.1px; }
+  .tab.active { background: transparent; color: var(--accent); }
+  .tab.active .tab-txt { font-weight: 700; }
+
+  /* Touch targets; 16px inputs stop iOS zoom-on-focus */
+  input, select { font-size: 16px; padding: 10px 12px; }
+  .btn { padding: 10px 14px; min-height: 42px; font-size: 14px; }
+  .row-actions { gap: 8px; }
+
+  /* Compact 2×2 stat cards */
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { padding: 12px 12px; }
+  .stat-value { font-size: 19px; }
+  .stat-label { font-size: 11px; }
+  .stat-sub { font-size: 11.5px; }
+
+  /* Tables marked .cards become stacked cards */
+  .table.cards thead { display: none; }
+  .table.cards, .table.cards tbody { display: block; }
+  .table.cards tr {
+    display: block; border: 1px solid var(--card-edge); border-radius: 12px;
+    margin: 10px 0; padding: 10px 14px; background: var(--bg-soft);
+  }
+  .table.cards td { display: flex; justify-content: space-between; align-items: center; gap: 12px; border: none; padding: 5px 0; text-align: right; }
+  .table.cards td[data-label]::before {
+    content: attr(data-label); color: var(--muted); font-size: 12px; text-align: left; flex-shrink: 0;
+  }
+  .table.cards td.card-title { justify-content: flex-start; text-align: left; font-size: 15px; padding-bottom: 6px; border-bottom: 1px solid var(--card-edge); margin-bottom: 4px; }
+  .table.cards td.row-actions { justify-content: flex-end; padding-top: 8px; }
+
+  /* Category bars tighter */
+  .cat-row { grid-template-columns: 86px 1fr 76px; gap: 8px; font-size: 12.5px; }
+
+  /* Converter stacks */
+  .converter { flex-direction: column; align-items: stretch; gap: 8px; }
+  .conv-eq { text-align: center; transform: rotate(90deg); font-size: 20px; }
+  .conv-side input { font-size: 20px; }
+
+  /* Goal actions wrap comfortably */
+  .goal-actions input { max-width: none; flex: 1; min-width: 140px; }
+
+  .footer { margin-top: 18px; }
+  .toast { bottom: calc(78px + env(safe-area-inset-bottom)); }
+}

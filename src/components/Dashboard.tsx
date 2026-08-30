@@ -119,7 +119,7 @@ export function Dashboard() {
         {recent.length === 0 ? (
           <Empty>No transactions yet. Automated salary deposits, bill payments and logged expenses all show up here.</Empty>
         ) : (
-          <table className="table">
+          <table className="table cards">
             <thead>
               <tr><th>Date</th><th>Description</th><th>Category</th><th>Account</th><th className="num">Amount</th><th className="num">≈ PHP</th><th /></tr>
             </thead>
@@ -128,12 +128,12 @@ export function Dashboard() {
                 const account = state.accounts.find((a) => a.id === t.accountId)
                 return (
                   <tr key={t.id}>
-                    <td className="muted">{formatDate(t.date)}</td>
-                    <td>{t.description}</td>
-                    <td><span className="chip">{t.category}</span></td>
-                    <td className="muted">{account?.name ?? '—'}</td>
-                    <td className={`num ${t.amount >= 0 ? 'good-text' : ''}`}>{account ? money(t.amount, account.currency) : peso(t.amountPHP)}</td>
-                    <td className="num muted">{peso(t.amountPHP)}</td>
+                    <td className="muted" data-label="Date">{formatDate(t.date)}</td>
+                    <td className="card-title">{t.description}</td>
+                    <td data-label="Category"><span className="chip">{t.category}</span></td>
+                    <td className="muted" data-label="Account">{account?.name ?? '—'}</td>
+                    <td className={`num ${t.amount >= 0 ? 'good-text' : ''}`} data-label="Amount">{account ? money(t.amount, account.currency) : peso(t.amountPHP)}</td>
+                    <td className="num muted" data-label="≈ PHP">{peso(t.amountPHP)}</td>
                     <td className="row-actions">
                       <ConfirmButton
                         label="✕"
