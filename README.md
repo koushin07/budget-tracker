@@ -47,10 +47,20 @@ Rule-based recommendations recomputed live from your data:
 - USD-earner tips (conversion spreads, hedging)
 - Behind-schedule goal warnings
 
+### ☁️ Cloud sync (Supabase)
+Optional cross-device sync using your own free [Supabase](https://supabase.com) project:
+
+1. Create a free project at supabase.com
+2. In the project dashboard: **SQL Editor → New query**, paste `supabase/setup.sql` from this repo, and Run (creates a `budgets` table locked down with Row Level Security — each account can only read/write its own row)
+3. Easiest path: **Authentication → Sign In / Up → disable "Confirm email"**
+4. In PesoWise, open the **Cloud** tab, paste your **Project URL** and **anon/publishable key** (Settings → API Keys), then create an account with any email + password
+
+Changes auto-sync a couple of seconds after you make them. On another device, connect the same project and sign in with the same account — your budget appears. If both the cloud and the device have data at first sign-in, PesoWise asks which copy wins. Without cloud sync the app works fully offline from localStorage.
+
 ### Extras
 - 📦 One-click JSON backup & restore
-- 🔒 All data stays in your browser (localStorage) — nothing is sent anywhere except the exchange-rate lookup
-- 📱 Responsive dark UI
+- 🔒 By default all data stays in your browser (localStorage); cloud sync is opt-in and goes only to *your* Supabase project
+- 📱 Mobile-first dark UI with bottom tab navigation
 
 ## Getting started
 

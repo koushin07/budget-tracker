@@ -8,6 +8,7 @@ import { Savings } from './components/Savings'
 import { Projections } from './components/Projections'
 import { Advisor } from './components/Advisor'
 import { Converter } from './components/Converter'
+import { Cloud } from './components/Cloud'
 import { toast } from './components/ui'
 
 const TABS = [
@@ -19,6 +20,7 @@ const TABS = [
   { id: 'projections', icon: '📈', text: 'Forecast', el: <Projections /> },
   { id: 'advisor', icon: '🧠', text: 'Advisor', el: <Advisor /> },
   { id: 'converter', icon: '💱', text: 'Convert', el: <Converter /> },
+  { id: 'cloud', icon: '☁️', text: 'Cloud', el: <Cloud /> },
 ] as const
 
 function Shell() {

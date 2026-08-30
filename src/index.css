@@ -176,6 +176,10 @@ input:focus, select:focus { outline: 2px solid var(--accent-strong); outline-off
 .good-text { color: var(--accent); }
 .bad-text { color: var(--danger); }
 .empty { color: var(--muted); background: var(--bg-soft); border: 1px dashed var(--card-edge); border-radius: var(--radius); padding: 16px; text-align: center; }
+.setup-steps { margin: 8px 0 14px; padding-left: 22px; }
+.setup-steps li { margin: 6px 0; }
+.setup-steps code { background: var(--bg-soft); border: 1px solid var(--card-edge); border-radius: 6px; padding: 1px 6px; font-size: 13px; }
+
 .pay-from { display: flex; align-items: center; gap: 10px; margin: 6px 0 12px; }
 .pay-from select { max-width: 280px; }
 .footer { text-align: center; font-size: 12.5px; margin-top: 26px; }
@@ -194,7 +198,7 @@ input:focus, select:focus { outline: 2px solid var(--accent-strong); outline-off
   /* Bottom navigation bar */
   .tabs {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-    display: grid; grid-template-columns: repeat(8, 1fr); gap: 0;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0;
     margin: 0; background: var(--bg-soft); border-top: 1px solid var(--card-edge);
     padding: 6px 2px calc(6px + env(safe-area-inset-bottom));
   }
